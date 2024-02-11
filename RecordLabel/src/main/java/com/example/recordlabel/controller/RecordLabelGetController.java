@@ -1,9 +1,11 @@
-package com.example.recordlabel;
+package com.example.recordlabel.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +21,14 @@ public class RecordLabelGetController {
 	private RecordLabelService service;
 	
 	@GetMapping("/records")
-	public List<RecordLabel> getRecordLabels(){
-		return service.getAllRecords();
+	public ResponseEntity<List<RecordLabel>> getRecordLabels(){
+		return ResponseEntity.ok(service.getAllRecords());
+	}
+	
+	@GetMapping("/records/{id}")
+	public ResponseEntity<RecordLabel> getRecordLabel(@PathVariable Integer id) {
+		RecordLabel record = service.getRecordById(id);
+		if(record == null) return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(record);
 	}
 }
