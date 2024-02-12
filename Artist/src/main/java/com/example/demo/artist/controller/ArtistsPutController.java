@@ -5,19 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.artist.model.Artist;
 import com.example.demo.artist.service.ArtistaService;
 
 @RestController
+@RequestMapping("artists")
 public class ArtistsPutController {
 	@Autowired
 	private ArtistaService service;
 	@Autowired
 	private ArtistGetController getController;
 	
-	@PutMapping("/artists/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Artist> updateArtist(@PathVariable Integer id, @RequestBody Artist artist){
 		//Validamos que haya algún artista con ese id
 		Artist existe = getController.getArtistById(id).getBody();

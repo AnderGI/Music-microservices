@@ -5,12 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.recordlabel.model.RecordLabel;
 import com.example.recordlabel.service.RecordLabelService;
 
 @RestController
+@RequestMapping("records")
 public class RecordLabelPutController {
 	@Autowired
 	private RecordLabelService service;
@@ -18,7 +20,7 @@ public class RecordLabelPutController {
 	@Autowired
 	private RecordLabelGetController getController;
 	
-	@PutMapping("/records/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<RecordLabel> updateRecord(@PathVariable Integer id, @RequestBody RecordLabel toUpdate) {
 		// Valido si existe record en ese id que me pasan
 		RecordLabel record = getController.getRecordLabel(id).getBody();

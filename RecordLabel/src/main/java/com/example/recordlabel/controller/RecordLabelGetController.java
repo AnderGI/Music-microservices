@@ -15,17 +15,18 @@ import com.example.recordlabel.service.RecordLabelService;
 
 
 @RestController
+@RequestMapping("records")
 public class RecordLabelGetController {
 	
 	@Autowired
 	private RecordLabelService service;
 	
-	@GetMapping("/records")
+	@GetMapping("")
 	public ResponseEntity<List<RecordLabel>> getRecordLabels(){
 		return ResponseEntity.ok(service.getAllRecords());
 	}
 	
-	@GetMapping("/records/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<RecordLabel> getRecordLabel(@PathVariable Integer id) {
 		RecordLabel record = service.getRecordById(id);
 		if(record == null) return ResponseEntity.notFound().build();

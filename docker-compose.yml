@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+  eurekams:
+    image: andergi/eureka:latest
+    container_name: eureka
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - "netArtistas"
+  gatewayms:
+    image: andergi/gateway:latest
+    container_name: gateway
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    depends_on:
+      - "eurekams"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+    networks:
+      - "netArtistas"
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=tiger
+      - MYSQL_DATABASE=music
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=tiger
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - "netArtistas"
+  recordlabelsms:
+    image: andergi/recordlabels:latest
+    container_name: recordlabels
+    mem_limit: 700m
+    ports:
+      - "8001:8001" 
+    depends_on:
+      - "mysql"
+      - "eurekams"
+    networks:
+      - "netArtistas"
+  artistsms:
+    image: andergi/artists:latest
+    container_name: artists
+    mem_limit: 700m
+    ports:
+      - "8002:8002" 
+    depends_on:
+      - "mysql"
+      - "eurekams"
+    networks:
+      - "netArtistas"
+networks:
+  netArtistas:
